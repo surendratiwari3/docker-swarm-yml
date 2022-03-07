@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+  database:
+    image: 'mysql:8.0'
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
+    deploy:
+     placement:
+        constraints:
+          - node.role == worker
+     labels:
+        - traefik.enable=false
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "admin2secret"
+      MYSQL_DATABASE: "admin"
+      MYSQL_USER: "admin"
+      MYSQL_PASSWORD: "admin"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+    networks:
+       - deployer_cloud-poc
+
+networks:
+  deployer_cloud-poc:
+    external: true
+
+volumes:
+  mysql_data:
