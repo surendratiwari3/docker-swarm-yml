@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=tasks.database
+    volumes:
+      - pma_data:/sessions
+    networks:
+      - deployer_cloud-poc
+
+networks:
+  deployer_cloud-poc:
+    external: true
+
+volumes:
+  pma_data:
